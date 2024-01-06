@@ -1,0 +1,39 @@
+.mySwiper{
+    max-width: 720px;
+    width: 95%;
+    /* height: 100%; */
+    margin: 0 auto;
+    margin-top: 5rem;
+}
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    /* background: #fff; */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+.swiper-pagination{
+    position: relative !important;
+    margin-top: 10rem;
+}
+
+.signin {
+    font-size: 1.4rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+  
+  .signin a {
+    color: #0D7377;
+    text-decoration: none;
+  }
+.eyeView{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 16px;
+    color: #0D7377;
+}
