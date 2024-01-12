@@ -2,10 +2,19 @@ import "./App.css"
 import { db } from "./firebaseConfig";
 import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 import Useronbording from './Onboarding/useronbording';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Toaster } from 'react-hot-toast'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
+import toast, { Toaster } from 'react-hot-toast'
+import { getAuth } from "firebase/auth";
+import BlogsLanding from "./MainPages/AllBlogs/BlogsLanding";
+import WriteNewBlog from "./MainPages/CreateBlog/WriteNewBlog"
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import Layout from "./MainPages/Layout";
+import UserProfile from "./MainPages/UserProfile/UserProfile";
 
 function App() {
+  const auth = getAuth();
+  const user = auth.currentUser;
   const queryClient = new QueryClient({
     defaultOptions: {
       queries:{
@@ -17,7 +26,20 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Useronbording/>
+      <ReactQueryDevtools initialIsOpen={false}/>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout/>}>
+            <Route index path="/user-onboarding" element={<Useronbording/>}/>
+            <Route path="/user-onboarding" element={<Useronbording/>}/>
+            <Route index element={<Navigate replace to="/blog"/>}/>
+            <Route path='/blog' element={<BlogsLanding/>}/>
+            <Route index element={<BlogsLanding/>}/>
+            <Route path="/write-new-blog" element={<WriteNewBlog/>}/>
+            <Route path="/user-profile/:username" element={<UserProfile/>}/>
+          </Route>
+        </Routes>
+      
       <Toaster position='top-center' gutter={12} containerStyle={{margin: '8px'}} toastOptions={{
         success:{
           duration: 3000
@@ -31,6 +53,7 @@ function App() {
           color: "#374151"
         }
       }}/>
+      </BrowserRouter>
     </QueryClientProvider>
   )
 }

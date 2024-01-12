@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const OnbordingLanding = styled.div`
-    width: 100vw;
+    /* width: 100vw; */
     /* height: 100vh; */
     display: grid;
     grid-template-columns: repeat(2, 1fr);

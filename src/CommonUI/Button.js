@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const PrimaryButton = styled.button`
-    padding-block: ${props => props.blockPadding};
+    padding-block: ${props => props.blockPadding ? props.blockPadding : ''};
     width: ${props => props.width ? props.width : ''};
     font-size: ${props => props.size ? props.size : '1.8rem'};
     margin: ${props => props.margin ? props.margin : ''};
@@ -9,6 +9,7 @@ export const PrimaryButton = styled.button`
     background-color: #0D7377;
     color: #FFF;
     text-align: center;
+    position: relative;
     border: none;
     outline: none;
     cursor: pointer;
@@ -19,11 +20,27 @@ export const PrimaryButton = styled.button`
     &:active{
         transform: translateY(2px);
     }
+    &:disabled{
+        opacity: 0.75;
+        cursor: not-allowed;
+    }
 `
 export const SecondaryButton = styled.button`
-
+    padding-block: ${props => props.blockPadding ? props.blockPadding : ''};
+    width: ${props => props.width ? props.width : ''};
+    font-size: ${props => props.size ? props.size : '1.8rem'};
+    margin: ${props => props.margin ? props.margin : ''};
+    border-radius: 0.6rem;
+    background-color: #FFF;
+    color: #0D7377;
+    border: 1px solid #0D7377;
+    text-align: center;
+    position: relative;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.6, 0.04, 0.98, 0.335);
 `
-export const GoogleLogin = styled.button`
+export const GoogleLogin = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
