@@ -4,6 +4,8 @@ const blogSlice = createSlice({
   name: 'blog',
   initialState: {
     visibleBlogs: [],
+    currentUserAllBlogs:[],
+    currentUserFavBlogs: [],
     blogs: [],
   },
   reducers: {
@@ -14,6 +16,12 @@ const blogSlice = createSlice({
       } else {
         state.visibleBlogs.push(blogId);
       }
+    },
+    setCurrentUserAllBlogs:(state, action)=>{
+      state.currentUserAllBlogs = action.payload
+    },
+    setCurrentUserFavBlogs:(state, action)=>{
+      state.currentUserFavBlogs = action.payload
     },
     likeBlog: (state, action) => {
       const { blogId, incrementLikes, incrementDislikes } = action.payload;
@@ -27,7 +35,9 @@ const blogSlice = createSlice({
   },
 });
 
-export const { toggleVisibility, likeBlog } = blogSlice.actions;
+export const { toggleVisibility, likeBlog, setCurrentUserAllBlogs, setCurrentUserFavBlogs } = blogSlice.actions;
 export const selectVisibleBlogs = (state) => state.blog.visibleBlogs;
+export const currentUserAllBlogs = (state) => state.blog.currentUserAllBlogs;
+export const currentUserFavBlogs = (state) => state.blog.currentUserAllBlogs;
 export const selectBlogs = (state) => state.blog.blogs;
 export default blogSlice.reducer;

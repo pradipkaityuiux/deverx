@@ -27,6 +27,7 @@ export const TitleBlog = styled.h1`
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: ${props => props.bottom ? props.bottom : ''};
+    margin-top: ${props => props.top ? props.top : ''};
     color: #0D7377;
 `
 export const Description = styled.p`

@@ -10,29 +10,22 @@ import { useQuery } from 'react-query'
 import { collection, getDocs, getDoc, setDoc, doc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleVisibility, likeBlog, selectVisibleBlogs, selectBlogs } from "./blogSlice"
+import { toggleVisibility, selectVisibleBlogs, selectBlogs } from "./blogSlice"
 import UserChip from '../../CommonUI/UserChip';
 
 export default function BlogsLanding() {
     const dispatch = useDispatch();
     const visibleBlogs = useSelector(selectVisibleBlogs);
-    const blogs = useSelector(selectBlogs);
+    const [currentUserFavBlogs, setCurrentUserFavBlogs] = useState([])
     const handleReadMoreClick = (blogId) => {
         dispatch(toggleVisibility(blogId));
     };
-    const handleLike = (blogId, type) => {
-        let incrementLikes = 0;
-        let incrementDislikes = 0;
 
-        if (type === 'like') {
-            incrementLikes = 1;
-        } else if (type === 'dislike') {
-            incrementLikes = -1;
-            incrementDislikes = 1;
-        }
-        console.log('handleLike', blogId, incrementLikes, incrementDislikes, data);
-        dispatch(likeBlog({ blogId, incrementLikes, incrementDislikes }));
-      };
+    useEffect(()=>{
+        refetch()
+    },[])
+    
+
     // function blogId() {
     //     var length = 16,
     //         charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
@@ -64,9 +57,9 @@ export default function BlogsLanding() {
     //   ------------------------------------------------
     const auth = getAuth()
     const user = auth.currentUser;
-    console.log(user);
+    const userUid = user?.uid;
 
-    const { data, isLoading } = useQuery('blogs-List', getBlogList, {
+    const { data, isLoading, refetch, isFetching } = useQuery('blogs-List', getBlogList, {
         cacheTime: 300000,
         staleTime: 30000,
         refetchOnMount: false,
@@ -75,13 +68,23 @@ export default function BlogsLanding() {
     });
 
     async function getBlogList() {
+        const userDocRef = doc(db, 'users', userUid);
+        const userDocSnapshot = await getDoc(userDocRef);
+        const userFavoriteBlogs = userDocSnapshot.data().favoriteBlogs || [];
+        setCurrentUserFavBlogs(userFavoriteBlogs)
+
         const querySnapshot = await getDocs(collection(db, 'blogs'));
         const getArray = [];
         querySnapshot.forEach((doc) => {
             const blogsList = doc.data();
+
+            const isFavorite = userFavoriteBlogs.some((item) => {
+                return item == blogsList.id;
+            });
+
             getArray.push({
-              blogs: blogsList,
-              favorite: false
+                blogs: blogsList,
+                favorite: isFavorite
             });
         });
         return getArray
@@ -90,7 +93,6 @@ export default function BlogsLanding() {
     if(isLoading){
         return <TitleBlog>Loading...</TitleBlog>
     }
-
     function formatDate(currDate) {
         const date = new Date(parseInt(currDate, 10));
         const formatted = date.toLocaleDateString().split('/');
@@ -107,15 +109,15 @@ export default function BlogsLanding() {
                         {/* <p>{blog.blogs.id}</p> */}
                         <Description>
                             {!visibleBlogs.includes(blog.blogs.id)
-                                ? `${blog.blogs.body.substring(0, 180)}...`
+                                ? `${blog.blogs.body.substring(0, 120)}...`
                                 : blog.blogs.body}
                             <span onClick={() => handleReadMoreClick(blog.blogs.id)}>
                                 {!visibleBlogs.includes(blog.blogs.id) ? 'Read More' : 'Show Less'}
                             </span>
                         </Description>
                         <Horizontal maxwidth='530px' width='95%' align='center'>
-                            <UserLikes likesNumber={blog.blogs.totalLikes} dislikesNumber={blog.blogs.totalDislikes} handleLike={handleLike} blogId={blog.blogs.id}/>
-                            <Bookmark />
+                            <UserLikes likesNumber={blog.blogs.totalLikes} dislikesNumber={blog.blogs.totalDislikes} blogId={blog.blogs.id}/>
+                            <Bookmark favorite={blog.favorite} blogId={blog.blogs.id} userFavoriteBlogs={currentUserFavBlogs} refetch={refetch} isFetching={isFetching}/>
                             <UserChip author={blog.blogs.authorName} authorId={blog.blogs.authorId} date={formatDate(blog.blogs.postedDate)}/>
                         </Horizontal>
                     </div>
