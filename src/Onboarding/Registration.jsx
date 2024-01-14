@@ -41,7 +41,7 @@ function Registration({ setRegister }) {
               .then(() => {
                 toast.success("Verification Email Sent, Verify it.")
                 toast.success("Now Login to Visit DeverX")
-                dataCreatedForUser();
+                dataCreatedForUser(user?.metadata?.createdAt);
                 setRegister(false);
               });
           })
@@ -55,16 +55,20 @@ function Registration({ setRegister }) {
         toast.error(error.message.replace('Firebase:', ''))
       });
   };
-  const dataCreatedForUser = async () => {
+  const dataCreatedForUser = async (date) => {
     await setDoc(doc(db, "users", auth.currentUser.uid), {
       id: auth.currentUser.uid,
       fName: userData.fName,
       lName: userData.lName,
+      bio: '',
       favoriteBlogs: [],
-      memberSince: '',
-      totalBlogs: 0,
-      totalLikes: 0,
+      allBlogs: [],
+      likedBlogs: [],
+      dislikedBlogs: [],
+      memberSince: date,
+      location: '',
       website: "",
+      websiteType: ''
     });
   }
   return (

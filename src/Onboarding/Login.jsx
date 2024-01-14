@@ -29,11 +29,8 @@ function Login({ setRegister }) {
 
 
   useEffect(()=>{
-    if (user) {
+    if (user && user.emailVerified) {
       navigate('/blog')
-      console.log(user.displayName);
-    } else {
-      console.log("User logged out");
     }
   },[user])
 
@@ -69,10 +66,10 @@ function Login({ setRegister }) {
     signInWithEmailAndPassword(auth, userDataLogin.email, userDataLogin.password)
       .then((userCredential) => {
         const user = auth.currentUser;
-        toast.success(user.displayName + " Successfully Logged in")
+        toast.success("Welcome, "+user.displayName+'😃')
         setLoader(false)
         if (user.emailVerified) {
-
+          navigate('/blog')
         } else {
           toast.error('Your Email is not Verified')
         }
@@ -99,13 +96,17 @@ function Login({ setRegister }) {
       if (!docSnap.exists()) {
         await setDoc(doc(db, "users", user.uid), {
           id: user.uid,
-          // fName: userData.fName,
-          // lName: userData.lName,
+          fName: "",
+          lName: "",
           favoriteBlogs: [],
           memberSince: '',
-          totalBlogs: 0,
-          totalLikes: 0,
+          bio: '',
+          allBlogs: [],
+          likedBlogs: [],
+          dislikedBlogs: [],
+          location: '',
           website: "",
+          websiteType: ''
         });
       }
       setLoader(false)

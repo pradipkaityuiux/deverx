@@ -9,13 +9,13 @@ function Layout() {
     const auth = getAuth();
     const user = auth.currentUser;
     useEffect(() => {
-        if (!user) navigate('/user-onboarding')
-        else navigate(`/blog`)
+        if (user?.emailVerified) navigate('/blog')
+        else navigate(`/`)
     }, [user])
 
     return (
         <>
-            <Navbar width='8rem' paddingBlock='0.4rem' />
+            <Navbar/>
             <Container topMargin='10rem'>
                 <Outlet/>
             </Container>

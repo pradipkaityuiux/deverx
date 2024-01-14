@@ -12,11 +12,14 @@ import { db } from "../../firebaseConfig";
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleVisibility, selectVisibleBlogs, selectBlogs } from "./blogSlice"
 import UserChip from '../../CommonUI/UserChip';
+import { BookMarkBtn } from '../../CommonUI/Button';
 
 export default function BlogsLanding() {
     const dispatch = useDispatch();
     const visibleBlogs = useSelector(selectVisibleBlogs);
-    const [currentUserFavBlogs, setCurrentUserFavBlogs] = useState([])
+    const [currentUserFavBlogs, setCurrentUserFavBlogs] = useState([]);
+    const [currentUserLiked, setCurrentUserLiked] = useState([])
+    const [currentUserDisliked, setCurrentUserDisliked] = useState([])
     const handleReadMoreClick = (blogId) => {
         dispatch(toggleVisibility(blogId));
     };
@@ -70,8 +73,12 @@ export default function BlogsLanding() {
     async function getBlogList() {
         const userDocRef = doc(db, 'users', userUid);
         const userDocSnapshot = await getDoc(userDocRef);
-        const userFavoriteBlogs = userDocSnapshot.data().favoriteBlogs || [];
-        setCurrentUserFavBlogs(userFavoriteBlogs)
+        const userFavoriteBlogs = userDocSnapshot.data()?.favoriteBlogs || [];
+        const userLikedBlogs = userDocSnapshot.data()?.likedBlogs || [];
+        const userDislikedBlogs = userDocSnapshot.data()?.dislikedBlogs || [];
+        setCurrentUserFavBlogs(userFavoriteBlogs);
+        setCurrentUserLiked(userLikedBlogs)
+        setCurrentUserDisliked(userDislikedBlogs)
 
         const querySnapshot = await getDocs(collection(db, 'blogs'));
         const getArray = [];
@@ -81,10 +88,18 @@ export default function BlogsLanding() {
             const isFavorite = userFavoriteBlogs.some((item) => {
                 return item == blogsList.id;
             });
+            const isLiked = userLikedBlogs.some((like) => {
+                return like == blogsList.id;
+            });
+            const isDisliked = userDislikedBlogs.some((dislike) => {
+                return dislike == blogsList.id;
+            });
 
             getArray.push({
                 blogs: blogsList,
-                favorite: isFavorite
+                favorite: isFavorite,
+                isLiked: isLiked,
+                isDisliked: isDisliked
             });
         });
         return getArray
@@ -102,7 +117,7 @@ export default function BlogsLanding() {
 
     return (
         <BlogContainer>
-            {data.map((blog, index) => {
+            {data?.map((blog, index) => {
                 return (
                     <div key={blog.blogs.id}>
                         <TitleBlog bottom='1.2rem'>{blog.blogs.title}</TitleBlog>
@@ -116,8 +131,10 @@ export default function BlogsLanding() {
                             </span>
                         </Description>
                         <Horizontal maxwidth='530px' width='95%' align='center'>
-                            <UserLikes likesNumber={blog.blogs.totalLikes} dislikesNumber={blog.blogs.totalDislikes} blogId={blog.blogs.id}/>
-                            <Bookmark favorite={blog.favorite} blogId={blog.blogs.id} userFavoriteBlogs={currentUserFavBlogs} refetch={refetch} isFetching={isFetching}/>
+                            <UserLikes likesNumber={blog.blogs.totalLikes} dislikesNumber={blog.blogs.totalDislikes} blogId={blog.blogs.id} authorId={blog.blogs.authorId} liked={blog.isLiked} isDisliked={blog.isDisliked} currentUserLiked={currentUserLiked} currentUserDisliked={currentUserDisliked} refetch={refetch}/>
+                            <BookMarkBtn disabled={userUid == blog.blogs.authorId}>
+                                <Bookmark favorite={blog.favorite} blogId={blog.blogs.id} userFavoriteBlogs={currentUserFavBlogs} refetch={refetch} isFetching={isFetching}/>
+                            </BookMarkBtn>
                             <UserChip author={blog.blogs.authorName} authorId={blog.blogs.authorId} date={formatDate(blog.blogs.postedDate)}/>
                         </Horizontal>
                     </div>

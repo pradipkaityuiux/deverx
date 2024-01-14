@@ -71,3 +71,15 @@ export const GoogleLogin = styled.div`
         }
     }
 `
+export const BookMarkBtn = styled.button`
+    margin-top: 2rem;
+    margin-right: auto;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    &:disabled{
+        cursor: not-allowed !important;
+        opacity: 0.7;
+    }
+`

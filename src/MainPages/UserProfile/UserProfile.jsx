@@ -4,13 +4,16 @@ import { useSearchParams } from 'react-router-dom'
 import { doc, getDoc } from 'firebase/firestore';
 import { useQueries, useQuery } from 'react-query';
 import { db } from '../../firebaseConfig';
-import toast from 'react-hot-toast';
 import { currentUserAllBlogs, currentUserFavBlogs, setCurrentUserAllBlogs, setCurrentUserFavBlogs } from '../AllBlogs/blogSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import GetAllBlogs from './GetAllBlogs';
 import GetFavoriteBlogs from './GetFavoriteBlogs';
-import { togglePopup } from './UserSlice';
-
+import { showPopupUserEdit, togglePopup, toggleUserEditPopup } from './UserSlice';
+import { BiLinkExternal } from "react-icons/bi";
+import { FaLocationDot } from "react-icons/fa6";
+import { BiSolidEdit } from "react-icons/bi";
+import { getAuth } from 'firebase/auth';
+import EditPopupBlog from './UserEditPopup';
 
 
 const ProfileContainer = styled.div`
@@ -25,7 +28,7 @@ const ProfileContainer = styled.div`
 `
 const ProfileImageContent = styled.div`
     display: flex;
-    align-items: center;
+    align-items: start;
     gap: 3.2rem;
     margin-bottom: 1rem;
     &>span{
@@ -38,12 +41,31 @@ const ProfileImageContent = styled.div`
     }
     &>div>p{
         font-size: 3.2rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.6rem;
         color: #414141;
     }
     &>div>span{
         font-size: 1.6rem;
-        color: #464646;
+        color: #7c7c7c;
+        display: block;
+        margin-block: 0.4rem;
+    }
+    &>div>span>svg{
+        font-size: 1.2rem;
+        color: #535353;
+    }
+    &>svg{
+        margin-top: 1rem;
+        margin-left: auto;
+        font-size: 4rem;
+        color: #0D7377;
+        padding: 0.6rem;
+        transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+        cursor: pointer;
+    }
+    &>svg:hover{
+        background-color: rgba(0,0,0,0.05);
+        border-radius: 0.4rem;
     }
 `
 const Analytics = styled.section`
@@ -61,13 +83,55 @@ const Analytics = styled.section`
         border-radius: 0.6rem;
     }
     &>div>strong{
-        font-size: 3.2rem;
+        font-size: 2.8rem;
         color: #0D7377;
         margin-top: 0.4rem;
     }
+    &>div>strong>a{
+        font-size: 2.8rem;
+        color: #0D7377;
+        text-decoration: none;
+    }
+    &>div>strong>a>svg{
+        font-size: 2.4rem;
+        padding-top: 0.4rem;
+    }
     &>div>p{
         color: #6b6b6b;
+        font-size: 1.8rem;
+    }
+    @media screen and (max-width: 460px) {
+        flex-direction: column;
+        &>div{
+            flex-direction: row;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 0.6rem;
+        }
+        &>div>strong{
+            font-size: 2rem;
+        }
+        &>div>strong>a{
+            font-size: 2rem;
+        }
+        &>div>strong>a>svg{
+            font-size: 2rem;
+            padding-top: 0.4rem;
+        }
+    }
+`
+const AboutMe = styled.p`
+    font-size: 1.8rem;
+    padding: 1rem;
+    color: #0d7377;
+    border-radius: 0.6rem;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+    line-height: 160%;
+    &>span{
         font-size: 2rem;
+        color: #0d7377;
+        font-weight: 600;
     }
 `
 const RadioContent = styled.div`
@@ -96,6 +160,10 @@ function UserProfile() {
     const [userData, setUserData] = useState({});
     const [toggleBlog, setToggleBlog] = useState('allBlogs')
     const dispatch = useDispatch()
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const showEditBtn = currentUserId == user?.uid;
+    const userEditPopup = useSelector(showPopupUserEdit)
 
     useEffect(()=>{
         dispatch(togglePopup(false));
@@ -155,12 +223,18 @@ function UserProfile() {
             <div>
                 <p>{data.fName} {data.lName}</p>
                 <span>Member Since: {formatDate(data.memberSince)}</span>
+                {data.location && <span><FaLocationDot/> {data.location}</span>}
             </div>
+            {showEditBtn ? <BiSolidEdit onClick={()=>dispatch(toggleUserEditPopup(true))}/> : null}
         </ProfileImageContent>
+        {data.bio && <AboutMe><span>About Me:</span> {data.bio}</AboutMe>}
         <Analytics>
             <div>
-                <p>Total Likes</p>
-                <strong>{data.totalLikes}</strong>
+                <p>Social Link</p>
+                {data.website ? 
+                    <strong><a href={data.website} target='_blank'>{data.websiteType.charAt(0).toUpperCase() + data.websiteType.slice(1)} <BiLinkExternal/></a></strong> : 
+                    <strong>NA</strong>
+                }
             </div>
             <div>
                 <p>Total Blogs</p>
@@ -181,6 +255,7 @@ function UserProfile() {
         {toggleBlog=='allBlogs' && <GetAllBlogs currentBlogs={currentBlogs} userId={currentUserId}/>}
         {toggleBlog=='favBlogs' && <GetFavoriteBlogs currentFavBlogs={currentFavBlogs} userId={currentUserId}/>}
         </>}
+        {userEditPopup && <EditPopupBlog refetch={refetch} location={data.location} website={data.website} type={data.websiteType} bio={data.bio}/>}
     </ProfileContainer>
   )
 }

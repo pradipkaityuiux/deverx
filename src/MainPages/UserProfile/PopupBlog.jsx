@@ -22,6 +22,7 @@ const PopupContent = styled.div`
     float: right;
     padding: 8rem 4rem 0;
     animation: slide 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+    overflow-y: auto;
     @keyframes slide {
         0%{
             transform: translateX(20rem);

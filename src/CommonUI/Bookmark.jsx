@@ -6,21 +6,16 @@ import { doc, updateDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebaseConfig";
 
-const BookmarkDiv = styled.button`
-    margin-top: 2rem;
-    margin-right: auto;
+const BookmarkDiv = styled.div`
     font-size: 2rem;
     padding: 0.6rem 0.6rem 0.2rem 0.6rem;
     border-radius: 5rem;
-    cursor: pointer;
     background-color: transparent;
     color: #0D7377;
     border: 1px solid #E5E1DA;
     &:disabled{
         cursor: not-allowed;
-        opacity: 0.7;
     }
-
     &>span{
         color: #323232;
         margin-left: 2px;

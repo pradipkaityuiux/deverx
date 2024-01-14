@@ -1,7 +1,7 @@
 import "./App.css"
 import { db } from "./firebaseConfig";
 import { collection, getDocs, doc, setDoc } from "firebase/firestore";
-import Useronbording from './Onboarding/useronbording';
+import Useronbording from './Onboarding/Useronbording';
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import toast, { Toaster } from 'react-hot-toast'
@@ -30,11 +30,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<Layout/>}>
-            <Route index path="/user-onboarding" element={<Useronbording/>}/>
-            <Route path="/user-onboarding" element={<Useronbording/>}/>
-            <Route index element={<Navigate replace to="/blog"/>}/>
+            <Route index element={<Useronbording/>}/>
+            <Route path="/" element={<Useronbording/>}/>
+            {/* <Route index element={<Navigate replace to="/blog"/>}/> */}
             <Route path='/blog' element={<BlogsLanding/>}/>
-            <Route index element={<BlogsLanding/>}/>
             <Route path="/write-new-blog" element={<WriteNewBlog/>}/>
             <Route path="/user-profile/:username" element={<UserProfile/>}/>
           </Route>

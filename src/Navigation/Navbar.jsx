@@ -80,13 +80,13 @@ const Guest = styled.p`
     color: #0D7377;
     font-weight: 500;
 `
-function Navbar({ width, paddingBlock }) {
+function Navbar() {
     const navigate = useNavigate();
     async function logoutUser() {
         try {
             const auth = getAuth();
             await signOut(auth);
-            navigate('/user-onboarding')
+            navigate('/')
 
         } catch (error) {
             toast.success("You are Logging Out")
@@ -101,13 +101,13 @@ function Navbar({ width, paddingBlock }) {
                     <img src={GoogleLogo} alt="" />
                     <h1>DeverX</h1>
                 </Logo>
-                {user ? <MainNav>
-                    <SecondaryButton width={width} blockPadding={paddingBlock} onClick={()=>navigate('write-new-blog')}>Write</SecondaryButton>
+                {user?.emailVerified ? <MainNav>
+                    <SecondaryButton width='8rem' blockPadding='0.4rem' onClick={()=>navigate('write-new-blog')}>Write</SecondaryButton>
                     <Bell>
                         <BiBell/>
                         <span></span>
                     </Bell>
-                    <ProfilePic title='Logout' onClick={logoutUser}>{user?.displayName.split(' ').slice(0, 2).map(part => part[0].toUpperCase()).join('')}</ProfilePic>
+                    <ProfilePic title='Logout' onClick={logoutUser}>{user?.displayName?.split(' ').slice(0, 2).map(part => part[0].toUpperCase()).join('')}</ProfilePic>
                 </MainNav> : <Guest>Welcome Guest</Guest>}
             </NavContaner>
         </Header>
