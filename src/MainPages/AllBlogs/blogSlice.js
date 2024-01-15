@@ -3,12 +3,16 @@ import { createSlice } from '@reduxjs/toolkit';
 const blogSlice = createSlice({
   name: 'blog',
   initialState: {
+    searchBlogs:[],
     visibleBlogs: [],
     currentUserAllBlogs:[],
     currentUserFavBlogs: [],
     blogs: [],
   },
   reducers: {
+    setSearchBlogs: (state, action) =>{
+      state.searchBlogs = action.payload
+    },
     toggleVisibility: (state, action) => {
       const blogId = action.payload;
       if (state.visibleBlogs.includes(blogId)) {
@@ -35,9 +39,10 @@ const blogSlice = createSlice({
   },
 });
 
-export const { toggleVisibility, likeBlog, setCurrentUserAllBlogs, setCurrentUserFavBlogs } = blogSlice.actions;
+export const { toggleVisibility, likeBlog, setCurrentUserAllBlogs, setCurrentUserFavBlogs, setSearchBlogs } = blogSlice.actions;
 export const selectVisibleBlogs = (state) => state.blog.visibleBlogs;
 export const currentUserAllBlogs = (state) => state.blog.currentUserAllBlogs;
 export const currentUserFavBlogs = (state) => state.blog.currentUserAllBlogs;
 export const selectBlogs = (state) => state.blog.blogs;
+export const searchBlogs = (state) => state.blog.searchBlogs;
 export default blogSlice.reducer;

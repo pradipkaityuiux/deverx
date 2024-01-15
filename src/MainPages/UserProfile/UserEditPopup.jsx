@@ -39,7 +39,7 @@ const PopupContent = styled.div`
         }
     }
 `
-const TextArea = styled.textarea`
+export const TextArea = styled.textarea`
   width: 100%;
   min-height: 50px;
   max-height: 200px;

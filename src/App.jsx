@@ -11,6 +11,7 @@ import WriteNewBlog from "./MainPages/CreateBlog/WriteNewBlog"
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Layout from "./MainPages/Layout";
 import UserProfile from "./MainPages/UserProfile/UserProfile";
+import SearchBlog from "./MainPages/SearchBlog/SearchBlog";
 
 function App() {
   const auth = getAuth();
@@ -36,6 +37,7 @@ function App() {
             <Route path='/blog' element={<BlogsLanding/>}/>
             <Route path="/write-new-blog" element={<WriteNewBlog/>}/>
             <Route path="/user-profile/:username" element={<UserProfile/>}/>
+            <Route path="/search-blog" element={<SearchBlog/>}/>
           </Route>
         </Routes>
       

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Container = styled.div`
     /* max-width: 580px; */
@@ -12,6 +12,11 @@ export const BlogContainer = styled.div`
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    ${props => props.loader ? css`
+        min-height: 60vh ;
+        align-items: center;
+        justify-content: center;
+    ` : ''}
     gap: 1.6rem;
     &>div{
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);

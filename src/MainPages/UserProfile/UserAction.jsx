@@ -45,14 +45,14 @@ function UserAction({flag, blogId}) {
         }}>
             <BiLinkExternal/>
         </div>
-        {flag && <>
+        {/* {flag && <>
             <div>
             <BiSolidEdit/>
         </div>
         <div>
             <BiSolidTrash/>
         </div>
-        </>}
+        </>} */}
     </ActionContent>
   )
 }

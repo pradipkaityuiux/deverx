@@ -14,6 +14,8 @@ import { FaLocationDot } from "react-icons/fa6";
 import { BiSolidEdit } from "react-icons/bi";
 import { getAuth } from 'firebase/auth';
 import EditPopupBlog from './UserEditPopup';
+import { BlogContainer } from '../../CommonUI/Container';
+import Loader from '../../CommonUI/Loader';
 
 
 const ProfileContainer = styled.div`
@@ -135,10 +137,15 @@ const AboutMe = styled.p`
     }
 `
 const RadioContent = styled.div`
-    margin-top: 2rem;
     display: flex;
     gap: 2rem;
     align-items: center;
+    position: sticky;
+    top: 60px;
+    padding-top: 2rem;
+    background-color: #FFF;
+    box-shadow: -4px 0 0 2px rgba(255,255,255,1);
+    z-index: 1;
     &>label{
         font-size: 2rem;
         cursor: pointer;
@@ -213,7 +220,7 @@ function UserProfile() {
         return formattedDate
     }
 
-    if(isLoading) return <p>Loading...</p>
+    if(isLoading) return <BlogContainer loader={true}><Loader color={'#1a8a8f'}/></BlogContainer>
 
   return (
     <ProfileContainer>

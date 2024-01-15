@@ -9,8 +9,7 @@ function Layout() {
     const auth = getAuth();
     const user = auth.currentUser;
     useEffect(() => {
-        if (user?.emailVerified) navigate('/blog')
-        else navigate(`/`)
+        if (!user?.emailVerified) navigate(`/`)
     }, [user])
 
     return (

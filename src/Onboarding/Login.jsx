@@ -10,9 +10,10 @@ import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, signInWithPopu
 import toast from 'react-hot-toast';
 import { Horizontal } from '../CommonUI/FlexContainer';
 import Loader from '../CommonUI/Loader';
-import { getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../firebaseConfig';
 
 function Login({ setRegister }) {
   const navigate = useNavigate()
@@ -89,17 +90,24 @@ function Login({ setRegister }) {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
       const user = result.user;
-
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
+      
+      let firstName = '';
+      let lastName = '';
+      if (user?.displayName) {
+        const nameParts = user?.displayName.split(' ');
+        firstName = nameParts[0] || '';
+        lastName = nameParts.slice(1).join(' ');
+      }
 
       if (!docSnap.exists()) {
-        await setDoc(doc(db, "users", user.uid), {
-          id: user.uid,
-          fName: "",
-          lName: "",
+        await setDoc(doc(db, "users", user?.uid), {
+          id: user?.uid,
+          fName: firstName,
+          lName: lastName,
           favoriteBlogs: [],
-          memberSince: '',
+          memberSince: user?.metadata?.createdAt,
           bio: '',
           allBlogs: [],
           likedBlogs: [],

@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Description, Title } from '../../CommonUI/Heading'
 import { useDispatch, useSelector } from 'react-redux'
 import { currentBlogId, togglePopup } from './UserSlice'
+import { TextInput } from '../../CommonUI/TextInput'
+import { TextArea } from './UserEditPopup'
+import { BiSolidEdit } from "react-icons/bi";
 
 const Popup = styled.div`
     z-index: 1;
@@ -32,21 +35,44 @@ const PopupContent = styled.div`
         }
     }
 `
-function PopupBlog({allBlogs}) {
+function PopupBlog({allBlogs, flag}) {
     const dispatch = useDispatch();
     const getBlogId = useSelector(currentBlogId);
-    const findCurrentBlog = allBlogs?.find(blog => blog.data.id === getBlogId)
-    console.log(getBlogId, findCurrentBlog);
+    const findCurrentBlog = allBlogs?.find(blog => blog.data.id === getBlogId);
+    const initialBlogData = {
+        title: findCurrentBlog?.data?.title,
+        body: findCurrentBlog?.data?.body,
+    };
+    const [editBtn, setEditBtn] = useState(false)
+    const [blogData, setBlogData] = useState(initialBlogData);
+    const handleBlogInputChange = (e) => {
+        const { name, value } = e.target;
+        setBlogData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      };
     return (
         <Popup onClick={(e)=>{
             if (e.target === e.currentTarget) {
                 dispatch(togglePopup(false));
             }
         }}>
+            <>
             <PopupContent>
                 <Title bottom='1.6rem'>{findCurrentBlog?.data?.title ? findCurrentBlog.data.title : "Not available"}</Title>
                 <Description>{findCurrentBlog?.data?.body ? findCurrentBlog.data.body  : "Not available"}</Description>
-            </PopupContent>
+            </PopupContent> 
+            {/* {!flag ? <PopupContent>
+                <Title bottom='1.6rem'>{findCurrentBlog?.data?.title ? findCurrentBlog.data.title : "Not available"}</Title>
+                <Description>{findCurrentBlog?.data?.body ? findCurrentBlog.data.body  : "Not available"}</Description>
+            </PopupContent> :
+            <PopupContent>
+                <TextInput autoComplete='off' name="title" value={blogData.title} onChange={handleBlogInputChange} className="input" type="text" placeholder="Title" />
+                <TextArea autoComplete='off' name="body" value={blogData.body} onChange={handleBlogInputChange} className="input" placeholder="Bio"/>
+                <BiSolidEdit/>
+            </PopupContent>} */}
+            </>
         </Popup>
     )
 }

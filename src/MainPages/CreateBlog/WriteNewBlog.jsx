@@ -93,6 +93,7 @@ function WriteNewBlog() {
       authorName: user.displayName,
       postedDate: (new Date()).getTime(),
       title: newBlogData.title,
+      titleArr: newBlogData.title.toLowerCase().split(' '),
       body: newBlogData.description,
       link: newBlogData.link,
       totalLikes: 0,

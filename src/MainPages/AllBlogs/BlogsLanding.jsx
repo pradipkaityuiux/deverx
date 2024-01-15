@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleVisibility, selectVisibleBlogs, selectBlogs } from "./blogSlice"
 import UserChip from '../../CommonUI/UserChip';
 import { BookMarkBtn } from '../../CommonUI/Button';
+import Loader from '../../CommonUI/Loader';
 
 export default function BlogsLanding() {
     const dispatch = useDispatch();
@@ -106,7 +107,7 @@ export default function BlogsLanding() {
     }
 
     if(isLoading){
-        return <TitleBlog>Loading...</TitleBlog>
+        return <BlogContainer loader={true}><Loader color={'#1a8a8f'}/></BlogContainer>
     }
     function formatDate(currDate) {
         const date = new Date(parseInt(currDate, 10));
@@ -116,7 +117,7 @@ export default function BlogsLanding() {
     }
 
     return (
-        <BlogContainer>
+        <BlogContainer loader={false}>
             {data?.map((blog, index) => {
                 return (
                     <div key={blog.blogs.id}>

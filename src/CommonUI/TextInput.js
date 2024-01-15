@@ -2,10 +2,10 @@ import styled from "styled-components";
 
 export const TextInput = styled.input`
     display: block;
-    padding: 0.8rem 1rem;
+    padding: ${props => props.padd ? '0.5rem 1rem' : '0.8rem 1rem'};
     font-size: 1.8rem;
     color: #607274;
-    width: 100%;
+    width: ${props => props.width=='unset' ? '100%' : '100%'};
     border-radius: 0.4rem;
     /* border: none; */
     border: 1px solid #b0b5b5;

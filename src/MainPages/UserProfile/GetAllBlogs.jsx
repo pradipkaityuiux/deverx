@@ -72,7 +72,7 @@ function GetAllBlogs({currentBlogs, userId}) {
                     </AllBlogsContent>
                 )
                 ))}
-            {toggleBlogPopup && <PopupBlog allBlogs={getBlogsData}/>}
+            {toggleBlogPopup && <PopupBlog allBlogs={getBlogsData} flag={showAdditional}/>}
         </div>
     )
 }
