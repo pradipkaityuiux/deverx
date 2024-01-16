@@ -4,7 +4,7 @@ import { currentUserAllBlogs } from '../AllBlogs/blogSlice';
 import { useQueries } from 'react-query';
 import { db } from '../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
-import { Description, TitleBlog } from '../../CommonUI/Heading';
+import { Description, Title, TitleBlog } from '../../CommonUI/Heading';
 import styled from 'styled-components';
 import UserAction from './UserAction';
 import { getAuth } from 'firebase/auth';
@@ -59,6 +59,7 @@ function GetAllBlogs({currentBlogs, userId}) {
 
     return (
         <div>
+             {!getBlogsData?.length && <Title>No Blogs Available</Title>}
             {getBlogsData.map(blog => (
                 blog.loading ? (
                     <AllBlogsContent key={blog.data?.id}>

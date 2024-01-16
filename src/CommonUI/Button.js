@@ -70,6 +70,12 @@ export const GoogleLogin = styled.div`
             color: #FFF;
         }
     }
+    @media screen and (max-width: 350px){
+        gap: 0.6rem;
+        &>p{
+            font-size: 1.4rem;
+        }
+    }
 `
 export const BookMarkBtn = styled.button`
     margin-top: 2rem;

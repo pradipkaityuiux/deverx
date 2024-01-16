@@ -1,16 +1,17 @@
 import styled from "styled-components";
 
 export const OnbordingLanding = styled.div`
-    /* width: 100vw; */
-    /* height: 100vh; */
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    justify-content: center;
     gap: 0;
-    `
+    @media screen and (max-width: 900px) {
+        flex-direction: column;
+    }
+`
 export const LeftPanel = styled.div`
     background-color: #FFF;
-    /* background-color: #DCF2F1; */
-    /* height: 100vh; */
+    display: flex;
+    flex-shrink: 5;
     position: relative;
     &::before{
         content: "";
@@ -23,14 +24,20 @@ export const LeftPanel = styled.div`
         transform: translate(-50%, 70%);
         z-index: 2;
     }
-    `
+    @media screen and (max-width: 900px) {
+        &::before{
+            display: none;
+        }
+    }
+
+`
 export const RightPanel = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: #fafcfc; */
+    flex-grow: 2;
+    flex-shrink: 1;
     background-color: #FFF;
-    /* height: 100vh; */
     `
 export const Image = styled.img`
     width: 100%;
@@ -47,6 +54,9 @@ export const Form = styled.form`
     padding: 2.4rem;
     border-radius: 0.4rem;
     position: relative;
+    @media screen and (max-width: 350px) {
+        padding: 2.4rem 0;
+    }
 `
 export const NavigationPanel = styled.nav`
     text-align: center;

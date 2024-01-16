@@ -1,7 +1,6 @@
 .mySwiper{
     max-width: 720px;
-    width: 95%;
-    /* height: 100%; */
+    width: 50vw;
     margin: 0 auto;
     margin-top: 5rem;
 }
@@ -36,4 +35,10 @@
     right: 12px;
     font-size: 16px;
     color: #0D7377;
+}
+@media screen and (max-width: 900px) {
+    .mySwiper{
+        max-width: 720px;
+        width: 80vw;
+    }
 }

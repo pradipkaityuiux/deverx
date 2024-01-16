@@ -31,6 +31,24 @@ const Like = styled.button`
     background-color: transparent;
     cursor: pointer;
     border-right: ${props => props.hasLine ? '1px solid #e2e2e2' : ''};
+    .animate{
+        transform: scale(1.5) rotate(-45deg);
+        animation: animate 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes animate {
+        0%{
+            transform: scale(1.5) rotate(-45deg);
+        }
+        40%{
+            transform: scale(0.6) rotate(0deg);
+        }
+        75%{
+            transform: scale(1.3) rotate(0deg);
+        }
+        100%{
+            transform: scale(1) rotate(0deg);
+        }
+    }
     &:hover{
         background-color: rgba(0,0,0,0.05);
     }
@@ -120,12 +138,12 @@ function UserLikes({likesNumber, dislikesNumber, blogId, authorId, liked, isDisl
   return (
       <LikeContainer>
           <Like onClick={() => handleLike(blogId, 'like', liked)} hasLine={true} disabled={userUid==authorId}>
-            {!liked ? <BiLike /> : <BiSolidLike/>}
+            {!liked ? <BiLike /> : <BiSolidLike className="animate"/>}
               <p>{likesNumber}</p>
           </Like>
           
           <Like onClick={() => handleLike(blogId, 'dislike', isDisliked)} disabled={userUid==authorId}>
-              {!isDisliked ? <BiDislike /> : <BiSolidDislike/>}
+              {!isDisliked ? <BiDislike /> : <BiSolidDislike className="animate"/>}
               <p>{dislikesNumber}</p>
           </Like>
 

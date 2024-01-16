@@ -4,7 +4,7 @@ import { currentUserFavBlogs } from '../AllBlogs/blogSlice';
 import { useQueries } from 'react-query';
 import { db } from '../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
-import { Description, TitleBlog } from '../../CommonUI/Heading';
+import { Description, Title, TitleBlog } from '../../CommonUI/Heading';
 import styled from 'styled-components';
 import UserAction from './UserAction';
 import { getAuth } from 'firebase/auth';
@@ -57,6 +57,7 @@ function GetFavoriteBlogs({currentFavBlogs, userId}) {
 
   return (
       <div>
+        {!getBlogsDataFav?.length && <Title>No Blogs Available</Title>}
           {getBlogsDataFav.map(blog => (
               blog.loading ? (
                   <AllBlogsContent key={blog.data?.id}>

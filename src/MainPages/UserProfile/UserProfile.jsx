@@ -45,6 +45,9 @@ const ProfileImageContent = styled.div`
         font-size: 3.2rem;
         margin-bottom: 0.6rem;
         color: #414141;
+        @media screen and (max-width: 430px) {
+           font-size: 2.6rem;
+        }
     }
     &>div>span{
         font-size: 1.6rem;
@@ -64,10 +67,19 @@ const ProfileImageContent = styled.div`
         padding: 0.6rem;
         transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
         cursor: pointer;
+        @media screen and (max-width: 430px) {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
     }
     &>svg:hover{
         background-color: rgba(0,0,0,0.05);
         border-radius: 0.4rem;
+    }
+    @media screen and (max-width: 430px) {
+        flex-direction: column;
+        align-items: center;
     }
 `
 const Analytics = styled.section`
