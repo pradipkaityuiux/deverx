@@ -235,11 +235,16 @@ function Navbar() {
     return (
         <Header>
             <NavContaner>
-                <Logo onClick={()=>navigate('/blog')}>
+                {user?.emailVerified ? <Logo onClick={()=>navigate('/blog')}>
                     {/* <RiMenu3Fill/> */}
                     <img src={GoogleLogo} alt="" />
                     <h1>DeverX</h1>
-                </Logo>
+                </Logo> : <Logo>
+                    {/* <RiMenu3Fill/> */}
+                    <img src={GoogleLogo} alt="" />
+                    <h1>DeverX</h1>
+                </Logo>}
+                
                 {user?.emailVerified ? <MainNav>
                 <Form onSubmit={handleSearchButtonClick}>
                     <TextInput padd={true} autoComplete='off' width={'unset'} name="location" value={searchTerm} onChange={handleSearchInputChange} className="input" type="text" placeholder="Search a Blog..." />
