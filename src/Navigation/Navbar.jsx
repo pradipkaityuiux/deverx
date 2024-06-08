@@ -187,10 +187,34 @@ const FormMobile = styled.form`
         display: block;
     }
 `
+const FloatingDiv = styled.div`
+    position: absolute;
+    top: 6.4rem;
+    max-width: 200px !important;
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    border-radius: 0.8rem;
+    background-color: #fff;
+    box-shadow: 4px 4px 8px 0 rgba(0,0,0,0.1);
+    &>button{
+        background-color: transparent;
+        border: 0;
+        padding: 0.8rem 2.8rem;
+        font-size: 1.6rem;
+        border-radius: 0.6rem;
+        cursor: pointer;
+        &:hover{
+            background-color: #f0f0f0;
+        }
+    }
+`
 function Navbar() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [showSearchBar, setShowSearchBar] = useState(false);
+    const [profileView, setProfileView] = useState(false);
     const refInput = useRef();
     const [searchTerm, setSearchTerm] = useState("");
     const search = async () => {
@@ -221,6 +245,7 @@ function Navbar() {
         search();
       };
     async function logoutUser() {
+        setProfileView(false);
         try {
             const auth = getAuth();
             await signOut(auth);
@@ -264,7 +289,7 @@ function Navbar() {
                         <span></span>
                     </Bell> */}
                     {/* <ProfilePic title='Logout' onClick={logoutUser}>{user?.displayName?.split(' ').slice(0, 2).map(part => part[0].toUpperCase()).join('')}</ProfilePic> */}
-                    <ProfilePic title='Logout' onClick={logoutUser}>
+                    <ProfilePic title='Logout' onClick={() => setProfileView(prev => !prev)}>
                         {user?.emailVerified && user?.photoURL ? 
                             <img src={user.photoURL} alt={user.displayName} /> : 
                             user?.emailVerified && user?.displayName ? 
@@ -272,6 +297,13 @@ function Navbar() {
                             <>{ user?.email.substring(0, 1).toUpperCase() }</>    
                         }
                     </ProfilePic>
+                    {profileView ? <FloatingDiv>
+                        <button onClick={()=>{
+                            setProfileView(false);
+                            navigate(`/user-profile/${user?.displayName.toLowerCase()}?author-id=${user?.uid}`)
+                        }}>Profile</button>
+                        <button onClick={logoutUser}>Logout</button>
+                    </FloatingDiv> : null}
                 </MainNav> : <Guest>Welcome Guest</Guest>}
             </NavContaner>
             {showSearchBar && <SearchMobile>

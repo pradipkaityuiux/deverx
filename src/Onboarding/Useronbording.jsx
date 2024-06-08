@@ -14,12 +14,30 @@ import Registration from './Registration';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
+import toast from 'react-hot-toast';
 
 function Useronbording() {
     const [register, setRegister] = useState(false);
     const navigate = useNavigate();
-    const auth = getAuth()
+    const auth = getAuth();
+    useEffect(()=>{
+        console.log("Hello from Obbording");
+        setTimeout(() => {
+            toast(
+              <div>
+                <p>For Testing Purpose, use below credentials</p><br />
+                <p><strong>Email: </strong>evalina.rainier@milkcreeks.com</p>
+                <p><strong>Password: </strong>@Anshu123</p>
+              </div>,
+                {
+                   style: {
+                    backgroundColor: '#ececec',
+                   },
+                  duration: 6000,
+                }
+              );
+        }, 1000);
+    },[])
     useEffect(()=>{
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
